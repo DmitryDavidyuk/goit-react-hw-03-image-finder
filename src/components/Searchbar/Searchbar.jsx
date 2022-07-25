@@ -4,7 +4,7 @@ import CSS from './Searchbar.module.css';
 
 class Searchbar extends Component {
   state = {
-    imageName: '',
+    query: '',
   };
 
   hendleNameChange = event => {
@@ -13,13 +13,14 @@ class Searchbar extends Component {
 
   hendleSubmit = event => {
     event.preventDefault();
-    const { imageName } = this.state;
+    const { query } = this.state;
+    const { onSubmit } = this.props;
 
-    if (imageName.trim() === '') {
+    if (query.trim() === '') {
       return toast.error('Введите название картинки');
     }
-    this.props.onSubmit(imageName);
-    this.setState({ imageName: '' });
+    onSubmit(query);
+    this.setState({ query: '' });
   };
 
   render() {
@@ -31,7 +32,7 @@ class Searchbar extends Component {
           </button>
 
           <input
-            value={this.state.imageName}
+            value={this.state.query}
             onChange={this.hendleNameChange}
             className="input"
             type="text"

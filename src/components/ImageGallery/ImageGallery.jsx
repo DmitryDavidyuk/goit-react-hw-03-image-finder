@@ -1,4 +1,6 @@
 import { Component } from 'react';
+import { Grid } from 'react-loader-spinner';
+
 import CSS from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 
@@ -10,6 +12,7 @@ class ImageGallery extends Component {
     request: null,
     status: 'idle',
     error: null,
+    page: 1,
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -38,6 +41,20 @@ class ImageGallery extends Component {
   render() {
     if (this.state.status === 'idle') {
       return <div>введите запрос</div>;
+    }
+    if (this.state.status === 'pending') {
+      return (
+        <Grid
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="grid-loading"
+          radius="12.5"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      );
     }
 
     if (this.state.status === 'resolved') {
