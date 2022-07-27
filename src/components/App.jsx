@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import fetchImages from './API/API';
+import ImageGallery from './ImageGallery';
+import Buttom from './Buttom';
+import CSS from './App.module.css';
 
 // import fetchImages from './api/api-services';
 
@@ -15,8 +18,11 @@ class App extends Component {
     isLoading: false,
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+  componentDidUpdate = (_, prevState) => {
+    if (
+      prevState.searchQuery !== this.state.searchQuery ||
+      prevState.currentPage !== this.state.currentPage
+    ) {
       this.getImages();
     }
   };
@@ -28,7 +34,6 @@ class App extends Component {
 
       this.setState(prevState => ({
         images: [...prevState.images, ...hits],
-        currentPage: prevState.currentPage + 1,
       }));
     } catch (error) {
       console.log('Smth wrong with App fetch', error);
@@ -40,16 +45,24 @@ class App extends Component {
     }
   };
 
+  loadMore = () => {
+    this.setState(prevState => ({ currentPage: prevState.currentPage + 1 }));
+  };
+
   onChangeQuery = query => {
-    this.setState({
+    this.setState(prevState => ({
+      currentPage: 1,
       searchQuery: query,
-    });
+      images: [],
+    }));
   };
 
   render() {
     return (
-      <div>
+      <div className={CSS.App}>
         <Searchbar onSearch={this.onChangeQuery} />
+        <ImageGallery images={this.state.images} />
+        <Buttom btnName={'Load more'} onClick={this.loadMore} />
         <ToastContainer />;
       </div>
     );
