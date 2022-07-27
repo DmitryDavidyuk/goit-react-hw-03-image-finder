@@ -1,13 +1,12 @@
 import React from 'react';
-import SearchForm from 'components/SearchForn/SearchForm';
+import SearchFrom from '../SearchFrom';
+
 import CSS from './Searchbar.module.css';
 
-const SearchBar = () => {
-  return (
-    <header className={CSS.Searchbar}>
-      <SearchForm />
-    </header>
-  );
-};
+const Searchbar = ({ onSearch }) => (
+  <header className={CSS.Searchbar}>
+    <SearchFrom onSearch={onSearch} />
+  </header>
+);
 
-export default SearchBar;
+export default Searchbar;
