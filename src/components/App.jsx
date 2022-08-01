@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
+import { ReactComponent as CloseIcon } from './icons/close.svg';
+
 import 'react-toastify/dist/ReactToastify.css';
 import fetchImages from './API/API';
 import ImageGallery from './ImageGallery';
 import Buttom from './Buttom';
 import Loader from './Loader';
 import CSS from './App.module.css';
-
-// import fetchImages from './api/api-services';
+import Modal from './Modal';
+import IconButton from './IconButton';
 
 import Searchbar from './Searchbar';
 
@@ -17,6 +19,9 @@ class App extends Component {
     currentPage: 1,
     images: [],
     status: false,
+    showModal: false,
+    largeImage: '',
+    error: null,
   };
 
   componentDidUpdate = (_, prevState) => {
@@ -73,8 +78,21 @@ class App extends Component {
     });
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      showModal: !prevState.showModal,
+      largeImage: '',
+    }));
+  };
+  handleGalleryItem = fullImageUrl => {
+    this.setState({
+      largeImage: fullImageUrl,
+      showModal: true,
+    });
+  };
+
   render() {
-    const { images, isLoading } = this.state;
+    const { images, isLoading, largeImage, showModal } = this.state;
     const needToShowLoadMore = images.length > 0 && images.length >= 12;
 
     return (
@@ -86,8 +104,19 @@ class App extends Component {
             <p>Use search field!</p>
           </div>
         )}
+        {showModal && (
+          <Modal onClose={this.toggleModal}>
+            <div className="Close-box">
+              <IconButton onClick={this.toggleModal} aria-label="Close modal">
+                <CloseIcon width="20px" height="20px" fill="#7e7b7b" />
+              </IconButton>
+            </div>
+
+            <img src={largeImage} alt="" className="Modal-image" />
+          </Modal>
+        )}
         {isLoading && <Loader />}
-        <ImageGallery images={images} />
+        <ImageGallery images={images} onImageClick={this.handleGalleryItem} />
         {needToShowLoadMore && (
           <Buttom btnName={'Load more'} onClick={this.loadMore} />
         )}

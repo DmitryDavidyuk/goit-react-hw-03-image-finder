@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import CSS from './SearchForm.module.css';
 import { toast } from 'react-toastify';
 
@@ -52,5 +54,9 @@ class SearchFrom extends Component {
     );
   }
 }
+
+SearchFrom.propTypes = {
+  onSearch: PropTypes.func.isRequired,
+};
 
 export default SearchFrom;
